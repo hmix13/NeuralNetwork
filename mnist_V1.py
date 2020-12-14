@@ -13,7 +13,7 @@ st.markdown("Creating a neural network from scratch")
 st.sidebar.title("Please select desired inouts")
 
 opti_dict= {"Adam": keras.optimizers.Adam, "RMSprop": keras.optimizers.RMSprop, "Adagrad":keras.optimizers.Adagrad, "Adamax": keras.optimizers.Adamax, "Nadam": keras.optimizers.Nadam }
-init_dict ={"RandomNormal":tf.keras.initializers.RandomNormal(mean=0., stddev=1.),"RandomUniform" :tf.keras.initializers.RandomUniform(),"GlorotNormal" : tf.keras.initializers.GlorotNormal(), "GlorotUniform" :tf.keras.initializers.GlorotUniform()}
+init_dict ={"RandomNormal":keras.initializers.RandomNormal(mean=0., stddev=1.),"RandomUniform" :keras.initializers.RandomUniform(),"GlorotNormal" : keras.initializers.GlorotNormal(), "GlorotUniform" :keras.initializers.GlorotUniform()}
 
 lr_opt = st.sidebar.selectbox('Select Learning Rate',(0.1, 0.01, 1, 0.5, 0.05))
 epoch_opt = st.sidebar.selectbox('Select Epochs',(20,100,200,300,400,500))
