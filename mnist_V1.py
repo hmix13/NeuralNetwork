@@ -2,7 +2,6 @@
 import keras
 from keras.datasets import mnist
 import matplotlib.pyplot as plt
-import tensorflow as tf
 import numpy as np
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
