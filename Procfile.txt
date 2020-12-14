@@ -1,0 +1,1 @@
+web: sh setup.py && streamlit run mnist_V1.py
