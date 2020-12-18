@@ -100,17 +100,18 @@ class nn_generic:
             self.modelH.compile(optimizer="adam", loss='categorical_crossentropy', metrics=['accuracy'])
             print ("Model Created")
             self.modelH.summary()
+            return self.modelH
         except Exception as ke:
             print ("Key is not defined", ke)
             self.modelH = None
 
-    def fit_model(self):
+    def fit_model(self, modelH):
         class LossAndErrorPrintingCallback(keras.callbacks.Callback):
             def on_epoch_end(self, epoch, logs=None):
                 prog.progress(epoch/epoch_opt)
 
         prog = st.progress(0)
-        self.history = self.modelH.fit(self.x_train, self.y_train, batch_size=HyperParam1['batchSize'], epochs=HyperParam1['epochs'], verbose=2, validation_split=.2, callbacks=[LossAndErrorPrintingCallback()])
+        self.history = modelH.fit(self.x_train, self.y_train, batch_size=HyperParam1['batchSize'], epochs=HyperParam1['epochs'], verbose=2, validation_split=.2, callbacks=[LossAndErrorPrintingCallback()])
         prog.progress(100)
 
     def accuracy(self):
@@ -137,7 +138,7 @@ if submit:
     dr = nn_generic()
     dr.encoding()
     dr.flatten_image()
-    dr.MakeGenericModel(HyperParam1)
-    dr.fit_model()
+    modelH = dr.MakeGenericModel(HyperParam1)
+    dr.fit_model(modelH)
     dr.accuracy()
     dr.plot_accuracy_graph()
