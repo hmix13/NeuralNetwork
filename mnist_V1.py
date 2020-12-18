@@ -2,7 +2,7 @@
 import keras
 from keras.datasets import mnist
 import matplotlib.pyplot as plt
-import tensorflow as tf
+
 import numpy as np
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
@@ -14,7 +14,7 @@ st.markdown("Creating a neural network from scratch")
 st.sidebar.title("Please select desired inouts")
 
 opti_dict= {"Adam": keras.optimizers.Adam, "RMSprop": keras.optimizers.RMSprop, "Adagrad":keras.optimizers.Adagrad, "Adamax": keras.optimizers.Adamax, "Nadam": keras.optimizers.Nadam }
-init_dict ={"RandomNormal":tf.keras.initializers.RandomNormal(mean=0., stddev=1.),"RandomUniform" :tf.keras.initializers.RandomUniform(),"GlorotNormal" : tf.keras.initializers.GlorotNormal(), "GlorotUniform" :tf.keras.initializers.GlorotUniform()}
+init_dict ={"RandomNormal":keras.initializers.RandomNormal(mean=0., stddev=1.),"RandomUniform" :keras.initializers.RandomUniform(),"GlorotNormal" : keras.initializers.GlorotNormal(), "GlorotUniform" :keras.initializers.GlorotUniform()}
 
 lr_opt = st.sidebar.selectbox('Select Learning Rate',(0.1, 0.01, 1, 0.5, 0.05))
 epoch_opt = st.sidebar.selectbox('Select Epochs',(20,100,200,300,400,500))
@@ -85,9 +85,9 @@ class nn_generic:
                 init = l[2]
                 if regu == "Yes":
                     if regu_type=='l1':
-                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=tf.keras.regularizers.l1(l1=regu_rate)))
+                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=keras.regularizers.l1(l1=regu_rate)))
                     else:
-                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=tf.keras.regularizers.l2(l2=regu_rate)))
+                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=keras.regularizers.l2(l2=regu_rate)))
                 else:
                     self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init))
 
