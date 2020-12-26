@@ -2,8 +2,8 @@
 import keras
 from keras.datasets import mnist
 import matplotlib.pyplot as plt
-
 import numpy as np
+import tensorflow as tf
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 import streamlit as st
@@ -14,7 +14,7 @@ st.markdown("Creating a neural network from scratch")
 st.sidebar.title("Please select desired inouts")
 
 opti_dict= {"Adam": keras.optimizers.Adam, "RMSprop": keras.optimizers.RMSprop, "Adagrad":keras.optimizers.Adagrad, "Adamax": keras.optimizers.Adamax, "Nadam": keras.optimizers.Nadam }
-init_dict ={"RandomNormal":keras.initializers.RandomNormal(mean=0., stddev=1.),"RandomUniform" :keras.initializers.RandomUniform(),"GlorotNormal" : keras.initializers.GlorotNormal(), "GlorotUniform" :keras.initializers.GlorotUniform()}
+init_dict ={"RandomNormal":tf.keras.initializers.RandomNormal(mean=0., stddev=1.),"RandomUniform" :tf.keras.initializers.RandomUniform(),"GlorotNormal" : tf.keras.initializers.GlorotNormal(), "GlorotUniform" :tf.keras.initializers.GlorotUniform()}
 
 lr_opt = st.sidebar.selectbox('Select Learning Rate',(0.1, 0.01, 1, 0.5, 0.05))
 epoch_opt = st.sidebar.selectbox('Select Epochs',(20,100,200,300,400,500))
@@ -85,9 +85,9 @@ class nn_generic:
                 init = l[2]
                 if regu == "Yes":
                     if regu_type=='l1':
-                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=keras.regularizers.l1(l1=regu_rate)))
+                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=tf.keras.regularizers.l1(l1=regu_rate)))
                     else:
-                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=keras.regularizers.l2(l2=regu_rate)))
+                        self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init, kernel_regularizer=tf.keras.regularizers.l2(l2=regu_rate)))
                 else:
                     self.modelH.add(Dense(l[0], activation=l[1], kernel_initializer=init))
 
@@ -100,18 +100,17 @@ class nn_generic:
             self.modelH.compile(optimizer="adam", loss='categorical_crossentropy', metrics=['accuracy'])
             print ("Model Created")
             self.modelH.summary()
-            return self.modelH
         except Exception as ke:
             print ("Key is not defined", ke)
             self.modelH = None
 
-    def fit_model(self, modelH):
+    def fit_model(self):
         class LossAndErrorPrintingCallback(keras.callbacks.Callback):
             def on_epoch_end(self, epoch, logs=None):
                 prog.progress(epoch/epoch_opt)
 
         prog = st.progress(0)
-        self.history = modelH.fit(self.x_train, self.y_train, batch_size=HyperParam1['batchSize'], epochs=HyperParam1['epochs'], verbose=2, validation_split=.2, callbacks=[LossAndErrorPrintingCallback()])
+        self.history = self.modelH.fit(self.x_train, self.y_train, batch_size=HyperParam1['batchSize'], epochs=HyperParam1['epochs'], verbose=2, validation_split=.2, callbacks=[LossAndErrorPrintingCallback()])
         prog.progress(100)
 
     def accuracy(self):
@@ -138,7 +137,7 @@ if submit:
     dr = nn_generic()
     dr.encoding()
     dr.flatten_image()
-    modelH = dr.MakeGenericModel(HyperParam1)
-    dr.fit_model(modelH)
+    dr.MakeGenericModel(HyperParam1)
+    dr.fit_model()
     dr.accuracy()
     dr.plot_accuracy_graph()
